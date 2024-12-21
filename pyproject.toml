@@ -1,0 +1,15 @@
+[project]
+name = "code-cleaner-py"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "DealiAxy", email = "dealiaxy@gmail.com"},
+]
+dependencies = ["loguru>=0.7.3"]
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
