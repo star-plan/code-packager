@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "DealiAxy", email = "dealiaxy@gmail.com"},
 ]
-dependencies = ["loguru>=0.7.3"]
+dependencies = ["loguru>=0.7.3", "pathspec>=0.12.1"]
 requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "MIT"}
