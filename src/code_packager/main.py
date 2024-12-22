@@ -10,9 +10,9 @@ logger.add(sys.stdout, colorize=True)
 logger.add('file_{time}.log')
 
 # 配置代码目录和输出压缩包路径
-CODE_DIR = r"c:\code"
-OUTPUT_ZIP = r"c:\temp\code_ssd.zip"
-GLOBAL_EXCLUDE_FILE = "exclude_patterns.txt"
+CODE_DIR = r"d:\code"
+OUTPUT_ZIP = r"c:\temp\code.zip"
+GLOBAL_EXCLUDE_FILE = "exclude_patterns.conf"
 
 
 def load_pathspec(file_path):
