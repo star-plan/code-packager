@@ -1,7 +1,7 @@
 [project]
-name = "code-cleaner-py"
+name = "code-packager"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Easily zip your codebase while excluding unnecessary files like a pro! Say goodbye to bloated archives and hello to clean, lightweight packages. 🎉"
 authors = [
     {name = "DealiAxy", email = "dealiaxy@gmail.com"},
 ]
