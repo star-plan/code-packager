@@ -155,7 +155,7 @@ class CodePackager:
         logger.info(f"去除注释: {'是' if remove_comments else '否'}")
         
         try:
-            with zipfile.ZipFile(output_zip, 'w', compression, allowZip64=True) as zf:
+            with zipfile.ZipFile(output_zip, 'w', compression=compression, allowZip64=True) as zf:
                 for root, dirs, files in os.walk(source_dir):
                     # 加载当前目录的 .gitignore 规则
                     gitignore_spec = self.file_filter.load_gitignore_patterns(root)

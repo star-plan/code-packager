@@ -12,9 +12,6 @@ from .packager import CodePackager
 from .utils import setup_logger, validate_source_directory, ensure_output_directory, print_statistics
 
 
-
-
-
 def main():
     """主函数"""
     # 设置日志
@@ -36,34 +33,44 @@ def main():
         return
     
     # 验证和准备目录
-    source_dir = validate_source_directory(args.source_dir)
-    if not source_dir:
+    if not validate_source_directory(args.source_dir):
         return
+
+    if not ensure_output_directory(args.output_zip):
+        return
+
+    source_dir = args.source_dir
+    output_zip = args.output_zip
     
-    output_zip = ensure_output_directory(args.output_zip)
-    if not output_zip:
-        return
+    # 加载配置
+    from .config import ConfigManager
+    config_manager = ConfigManager()
+    
+    # 获取路径规则
+    if args.config:
+        pathspec = config_manager.load_custom_config(args.config)
+    else:
+        pathspec = config_manager.load_pathspec_from_preset(args.preset)
     
     # 创建打包器实例
-    packager = CodePackager(
-        preset=args.preset,
-        config_file=args.config,
-        remove_comments=args.remove_comments,
-        compression_method=args.compression,
-        verbose=args.verbose
-    )
+    packager = CodePackager(pathspec)
     
     # 开始打包
     start_time = time.time()
     
     try:
-        stats = packager.create_package(source_dir, output_zip)
+        stats = packager.create_zip(
+            source_dir, 
+            output_zip,
+            remove_comments=args.remove_comments,
+            compression_method=args.compression
+        )
         
         end_time = time.time()
         elapsed_time = end_time - start_time
         
         # 显示统计信息
-        print_statistics(stats, output_zip, elapsed_time)
+        print_statistics(stats, elapsed_time, output_zip, args.remove_comments)
         
     except Exception as e:
          logger.error(f"打包过程中发生错误: {e}")

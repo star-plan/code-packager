@@ -1,10 +1,13 @@
 """注释处理模块
 
 负责处理各种编程语言的注释和文档字符串移除。
+使用 Python 内置的 tokenize 模块实现更准确的注释处理。
 """
 
+import io
 import re
-from typing import List
+import tokenize
+from typing import List, Optional
 from loguru import logger
 
 
@@ -57,57 +60,77 @@ class CommentProcessor:
         
         return content
     
-    def _is_docstring_start(self, lines: List[str], line_index: int) -> bool:
-        """检查指定行是否是docstring的开始
-        
-        Args:
-            lines (List[str]): 代码行列表
-            line_index (int): 当前行索引
-            
-        Returns:
-            bool: 是否是docstring开始
-        """
-        if line_index >= len(lines):
-            return False
-        
-        line = lines[line_index].strip()
-        if not (line.startswith('"""') or line.startswith("'''")):
-            return False
-        
-        # 检查是否是模块级别的docstring（文件开头或只有注释/空行之前）
-        is_module_start = True
-        for i in range(line_index):
-            prev_line = lines[i].strip()
-            if prev_line and not prev_line.startswith('#'):
-                # 如果前面有非注释、非空行的代码，则不是模块级docstring
-                is_module_start = False
-                break
-        
-        if is_module_start:
-            return True
-        
-        # 向前查找最近的非空、非注释行
-        for i in range(line_index - 1, -1, -1):
-            prev_line = lines[i].strip()
-            if not prev_line:  # 跳过空行
-                continue
-            if prev_line.startswith('#'):  # 跳过注释行
-                continue
-            
-            # 检查是否是函数、类定义
-            if (prev_line.startswith('def ') or 
-                prev_line.startswith('class ') or 
-                prev_line.startswith('async def ') or
-                prev_line.endswith(':')):
-                return True
-            
-            # 如果遇到其他代码，则不是docstring
-            return False
-        
-        return False
-    
     def _remove_python_comments(self, content: str) -> str:
         """移除Python代码中的注释和docstring
+        
+        使用 tokenize 模块实现更准确的注释和文档字符串移除。
+        
+        Args:
+            content (str): Python代码内容
+            
+        Returns:
+            str: 处理后的内容
+        """
+        try:
+            return self._remove_comments_and_docstrings_with_tokenize(content)
+        except Exception as e:
+            logger.warning(f"使用 tokenize 处理失败，回退到简单处理: {e}")
+            return self._simple_remove_python_comments(content)
+    
+    def _remove_comments_and_docstrings_with_tokenize(self, source: str) -> str:
+        """使用 tokenize 模块移除注释和文档字符串
+        
+        Args:
+            source (str): Python 源代码
+            
+        Returns:
+            str: 处理后的代码
+        """
+        io_obj = io.StringIO(source)
+        out = ""
+        prev_toktype = tokenize.INDENT
+        last_lineno = -1
+        last_col = 0
+        
+        try:
+            for tok in tokenize.generate_tokens(io_obj.readline):
+                token_type = tok[0]
+                token_string = tok[1]
+                start_line, start_col = tok[2]
+                end_line, end_col = tok[3]
+                ltext = tok[4]
+                
+                # 处理换行
+                if start_line > last_lineno:
+                    last_col = 0
+                if start_col > last_col:
+                    out += (" " * (start_col - last_col))
+                
+                # 跳过注释
+                if token_type == tokenize.COMMENT:
+                    pass
+                # 跳过文档字符串
+                elif token_type == tokenize.STRING:
+                    if prev_toktype != tokenize.INDENT:
+                        # 如果前一个token不是缩进，说明这是一个普通字符串
+                        if prev_toktype != tokenize.NEWLINE:
+                            if start_col > 0:
+                                out += token_string
+                else:
+                    out += token_string
+                
+                prev_toktype = token_type
+                last_col = end_col
+                last_lineno = end_line
+                
+        except tokenize.TokenError:
+            # 如果tokenize失败，返回原始内容
+            return source
+            
+        return out
+    
+    def _simple_remove_python_comments(self, content: str) -> str:
+        """简单的Python注释移除（回退方案）
         
         Args:
             content (str): Python代码内容
@@ -117,87 +140,31 @@ class CommentProcessor:
         """
         lines = content.split('\n')
         result_lines = []
-        in_multiline_string = False
-        in_docstring = False
-        string_delimiter = None
-        i = 0
         
-        while i < len(lines):
-            line = lines[i]
+        for line in lines:
+            # 简单移除以 # 开头的注释行
             stripped = line.strip()
-            
-            if not stripped:
-                result_lines.append(line)
-                i += 1
+            if stripped.startswith('#'):
                 continue
             
-            # 如果在多行字符串或docstring中
-            if in_multiline_string or in_docstring:
-                if string_delimiter and string_delimiter in line:
-                    # 检查是否是字符串结束
-                    if line.count(string_delimiter) % 2 == 1:
-                        if in_docstring:
-                            # docstring结束，跳过这一行
-                            in_docstring = False
-                            string_delimiter = None
-                            i += 1
-                            continue
-                        else:
-                            # 普通多行字符串结束
-                            in_multiline_string = False
-                            string_delimiter = None
-                            result_lines.append(line)
-                
-                # 如果是docstring，跳过这一行
-                if in_docstring:
-                    i += 1
-                    continue
-                else:
-                    result_lines.append(line)
-                i += 1
-                continue
+            # 移除行内注释（简单处理，不考虑字符串内的#）
+            if '#' in line:
+                # 查找第一个不在字符串内的#
+                in_string = False
+                quote_char = None
+                for i, char in enumerate(line):
+                    if char in ['"', "'"] and (i == 0 or line[i-1] != '\\'):
+                        if not in_string:
+                            in_string = True
+                            quote_char = char
+                        elif char == quote_char:
+                            in_string = False
+                            quote_char = None
+                    elif char == '#' and not in_string:
+                        line = line[:i].rstrip()
+                        break
             
-            # 检查是否是docstring开始
-            if self._is_docstring_start(lines, i):
-                string_delimiter = stripped[:3] if stripped.startswith(('"""', "'''")) else None
-                if string_delimiter:
-                    # 检查是否是单行docstring
-                    if stripped.count(string_delimiter) >= 2:
-                        # 单行docstring，直接跳过
-                        i += 1
-                        continue
-                    else:
-                        # 多行docstring开始
-                        in_docstring = True
-                        i += 1
-                        continue
-            
-            # 检查是否是普通多行字符串
-            elif stripped.startswith('"""') or stripped.startswith("'''"):
-                string_delimiter = stripped[:3]
-                if stripped.count(string_delimiter) == 1:
-                    in_multiline_string = True
-                result_lines.append(line)
-                i += 1
-                continue
-            
-            # 处理单行注释
-            elif stripped.startswith('#'):
-                i += 1
-                continue
-            
-            else:
-                # 处理行内注释
-                comment_pos = line.find('#')
-                if comment_pos != -1:
-                    # 简单处理，不考虑字符串内的#
-                    line = line[:comment_pos].rstrip()
-                if line.strip():  # 只保留非空行
-                    result_lines.append(line)
-                i += 1
-                continue
-            
-            i += 1
+            result_lines.append(line)
         
         return '\n'.join(result_lines)
     
