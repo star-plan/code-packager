@@ -4,6 +4,8 @@ from textual.widgets import Header, Footer, Input, Button, Label, Select, Checkb
 from loguru import logger
 import sys
 
+from . import __version__
+
 # Try to import actions, handle if not available (e.g. during install check)
 try:
     from .actions import run_packaging_task
@@ -12,6 +14,8 @@ except ImportError:
 
 class CodePackagerApp(App):
     """Code Packager TUI Application"""
+    
+    TITLE = f"Code Packager v{__version__}"
     
     CSS = """
     Container {

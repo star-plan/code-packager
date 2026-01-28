@@ -6,6 +6,7 @@
 import argparse
 from typing import Any
 
+from . import __version__
 from .config import ConfigManager
 
 
@@ -79,6 +80,13 @@ class CommandLineInterface:
             '--verbose', '-v', 
             action='store_true',
             help='显示详细输出'
+        )
+        
+        parser.add_argument(
+            '--version', '-V',
+            action='version',
+            version=f'%(prog)s {__version__}',
+            help='显示版本信息'
         )
         
         return parser
