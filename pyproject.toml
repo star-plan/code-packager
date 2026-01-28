@@ -1,15 +1,22 @@
 [project]
 name = "code-packager"
-version = "0.1.0"
+version = "0.2.0"
 description = "Easily zip your codebase while excluding unnecessary files like a pro! Say goodbye to bloated archives and hello to clean, lightweight packages. 🎉"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
 authors = [
     {name = "DealiAxy", email = "dealiaxy@gmail.com"},
 ]
-dependencies = ["loguru>=0.7.3", "pathspec>=0.12.1"]
-requires-python = "==3.11.*"
-readme = "README.md"
-license = {text = "MIT"}
+dependencies = [
+    "loguru>=0.7.3",
+    "pathspec>=0.12.1",
+    "textual>=0.70.0",
+]
 
+[project.scripts]
+code-packager = "code_packager.main:main"
 
-[tool.pdm]
-distribution = false
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

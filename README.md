@@ -28,7 +28,19 @@ When working with large codebases, manual packaging can be a nightmare. CodePack
 
 ## 🚀 Quick Start
 
-### Installation
+### Installation & Run
+
+You can run CodePackager directly using `uv` without manual installation:
+
+```bash
+# Run TUI (Terminal User Interface)
+uvx --from . code-packager
+
+# Run CLI (Command Line Interface)
+uvx --from . code-packager --source . --output code_package.zip
+```
+
+### Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -36,31 +48,24 @@ When working with large codebases, manual packaging can be a nightmare. CodePack
    cd code-packager
    ```
 
-2. **Install dependencies**
+2. **Sync dependencies**
    ```bash
-   pdm install
+   uv sync
    ```
 
-### Basic Usage
-
-```bash
-# Basic packaging with default preset
-python -m src.code_packager /path/to/source output.zip
-
-# Use a specific preset
-python -m src.code_packager /path/to/source output.zip --preset git-friendly
-
-# Remove comments and use LZMA compression
-python -m src.code_packager /path/to/source output.zip --preset complete --remove-comments --compression lzma
-
-# List all available presets
-python -m src.code_packager --list-presets
-```
+3. **Run from source**
+   ```bash
+   # Run TUI
+   uv run code-packager
+   
+   # Run CLI
+   uv run code-packager --source . --output output.zip
+   ```
 
 ## 📋 Command Line Options
 
 ```bash
-Usage: python -m src.code_packager [OPTIONS] SOURCE_DIR OUTPUT_ZIP
+Usage: uvx --from . code-packager [OPTIONS] [SOURCE_DIR] [OUTPUT_ZIP]
 
 Arguments:
   SOURCE_DIR    Source code directory to package
