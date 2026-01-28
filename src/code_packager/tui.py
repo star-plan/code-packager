@@ -15,7 +15,7 @@ except ImportError:
 class CodePackagerApp(App):
     """Code Packager TUI Application"""
     
-    TITLE = f"Code Packager v{__version__}"
+    TITLE = f"PackMyCode v{__version__}"
     
     CSS = """
     Container {

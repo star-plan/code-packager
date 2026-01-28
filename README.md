@@ -16,9 +16,9 @@
 - **🌍 Cross-Platform**: Works seamlessly on Windows, macOS, and Linux
 - **⚡ Fast & Efficient**: Optimized for large codebases with blazing-fast execution
 
-## 🤔 Why Use CodePackager?
+## 🤔 Why Use PackMyCode?
 
-When working with large codebases, manual packaging can be a nightmare. CodePackager simplifies the process by:
+When working with large codebases, manual packaging can be a nightmare. PackMyCode simplifies the process by:
 
 - Automatically skipping files you don't need (e.g., `node_modules`, `*.log`, `__pycache__`)
 - Providing flexible preset configurations for different scenarios
@@ -30,14 +30,14 @@ When working with large codebases, manual packaging can be a nightmare. CodePack
 
 ### Installation & Run
 
-You can run CodePackager directly using `uv` without manual installation:
+You can run PackMyCode directly using `uv` without manual installation:
 
 ```bash
 # Run TUI (Terminal User Interface)
-uvx --from . code-packager
+uvx --from . pack-my-code
 
 # Run CLI (Command Line Interface)
-uvx --from . code-packager --source . --output code_package.zip
+uvx --from . pack-my-code --source . --output code_package.zip
 ```
 
 ### Development Setup
@@ -56,16 +56,16 @@ uvx --from . code-packager --source . --output code_package.zip
 3. **Run from source**
    ```bash
    # Run TUI
-   uv run code-packager
+   uv run pack-my-code
    
    # Run CLI
-   uv run code-packager --source . --output output.zip
+   uv run pack-my-code --source . --output output.zip
    ```
 
 ## 📋 Command Line Options
 
 ```bash
-Usage: uvx --from . code-packager [OPTIONS] [SOURCE_DIR] [OUTPUT_ZIP]
+Usage: uvx --from . pack-my-code [OPTIONS] [SOURCE_DIR] [OUTPUT_ZIP]
 
 Arguments:
   SOURCE_DIR    Source code directory to package

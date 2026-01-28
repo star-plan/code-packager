@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-code-packager = "code_packager.main:main"
+pack-my-code = "code_packager.main:main"
 
 [build-system]
 requires = ["hatchling"]
