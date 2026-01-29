@@ -28,16 +28,32 @@ When working with large codebases, manual packaging can be a nightmare. PackMyCo
 
 ## 🚀 Quick Start
 
-### Installation & Run
+### Usage
 
-You can run PackMyCode directly using `uv` without manual installation:
+You can run `pack-my-code` directly using `uvx` without installation:
+
+```bash
+uvx pack-my-code
+```
+
+Or install it first:
+
+```bash
+# Install via pip
+pip install pack-my-code
+
+# Install via uv (recommended)
+uv tool install pack-my-code
+```
+
+Once installed, you can use the `pack-my-code` command directly:
 
 ```bash
 # Run TUI (Terminal User Interface)
-uvx --from . pack-my-code
+pack-my-code
 
 # Run CLI (Command Line Interface)
-uvx --from . pack-my-code --source . --output code_package.zip
+pack-my-code --source . --output code_package.zip
 ```
 
 ### Development Setup
@@ -65,7 +81,7 @@ uvx --from . pack-my-code --source . --output code_package.zip
 ## 📋 Command Line Options
 
 ```bash
-Usage: uvx --from . pack-my-code [OPTIONS] [SOURCE_DIR] [OUTPUT_ZIP]
+Usage: pack-my-code [OPTIONS] [SOURCE_DIR] [OUTPUT_ZIP]
 
 Arguments:
   SOURCE_DIR    Source code directory to package

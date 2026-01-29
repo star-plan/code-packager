@@ -21,43 +21,53 @@ Code Packager 是一个灵活的代码打包工具，支持多种配置方案和
 
 ## 使用方法
 
+### 无需安装直接运行 (推荐)
+
+如果您安装了 `uv`，可以直接运行：
+
+```bash
+uvx pack-my-code
+```
+
 ### 基本用法
+
+如果您已安装该工具（通过 `pip` 或 `uv tool`）：
 
 ```bash
 # 使用基础方案打包
-python -m code_packager /path/to/source output.zip
+pack-my-code /path/to/source output.zip
 
 # 指定预设方案
-python -m code_packager /path/to/source output.zip --preset git-friendly
+pack-my-code /path/to/source output.zip --preset git-friendly
 
 # 去除代码注释
-python -m code_packager /path/to/source output.zip --preset basic --remove-comments
+pack-my-code /path/to/source output.zip --preset basic --remove-comments
 
 # 使用LZMA压缩
-python -m code_packager /path/to/source output.zip --compression lzma
+pack-my-code /path/to/source output.zip --compression lzma
 ```
 
 ### 查看可用选项
 
 ```bash
 # 列出所有预设方案
-python -m code_packager --list-presets
+pack-my-code --list-presets
 
 # 查看帮助信息
-python -m code_packager --help
+pack-my-code --help
 ```
 
 ### 高级用法
 
 ```bash
 # 使用自定义配置文件
-python -m code_packager /path/to/source output.zip --config my_config.conf
+pack-my-code /path/to/source output.zip --config my_config.conf
 
 # 详细输出模式
-python -m code_packager /path/to/source output.zip --verbose
+pack-my-code /path/to/source output.zip --verbose
 
 # 组合多个选项
-python -m code_packager /path/to/source output.zip \
+pack-my-code /path/to/source output.zip \
   --preset complete \
   --remove-comments \
   --compression lzma \
@@ -120,7 +130,7 @@ dist/
 
 然后使用：
 ```bash
-python -m code_packager /path/to/source output.zip --config my_config.conf
+pack-my-code /path/to/source output.zip --config my_config.conf
 ```
 
 ## 统计信息

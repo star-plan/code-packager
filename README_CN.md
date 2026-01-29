@@ -28,7 +28,45 @@
 
 ## 🚀 快速开始
 
-### 安装
+### 基本用法
+
+您可以使用 `uvx` 直接运行，无需安装：
+
+```bash
+uvx pack-my-code
+```
+
+或者先进行安装：
+
+```bash
+# 通过 pip 安装
+pip install pack-my-code
+
+# 或使用 uv（推荐）
+uv tool install pack-my-code
+```
+
+安装后，您可以直接使用 `pack-my-code` 命令：
+
+```bash
+# 启动 TUI (终端用户界面)
+pack-my-code
+
+# 使用 CLI (命令行界面)
+# 使用默认预设进行基本打包
+pack-my-code /path/to/source output.zip
+
+# 使用特定预设
+pack-my-code /path/to/source output.zip --preset git-friendly
+
+# 移除注释并使用 LZMA 压缩
+pack-my-code /path/to/source output.zip --preset complete --remove-comments --compression lzma
+
+# 列出所有可用预设
+pack-my-code --list-presets
+```
+
+### 开发设置
 
 1. **克隆仓库**
    ```bash
@@ -38,29 +76,18 @@
 
 2. **安装依赖**
    ```bash
-   pdm install
+   uv sync
    ```
 
-### 基本用法
-
-```bash
-# 使用默认预设进行基本打包
-python -m src.code_packager /path/to/source output.zip
-
-# 使用特定预设
-python -m src.code_packager /path/to/source output.zip --preset git-friendly
-
-# 移除注释并使用 LZMA 压缩
-python -m src.code_packager /path/to/source output.zip --preset complete --remove-comments --compression lzma
-
-# 列出所有可用预设
-python -m src.code_packager --list-presets
-```
+3. **从源码运行**
+   ```bash
+   uv run pack-my-code
+   ```
 
 ## 📋 命令行选项
 
 ```bash
-用法: python -m src.code_packager [选项] 源目录 输出压缩包
+用法: pack-my-code [选项] 源目录 输出压缩包
 
 参数:
   源目录        要打包的源代码目录
