@@ -1,5 +1,5 @@
 [project]
-name = "code-packager"
+name = "pack-my-code"
 version = "0.2.0"
 description = "Easily zip your codebase while excluding unnecessary files like a pro! Say goodbye to bloated archives and hello to clean, lightweight packages. 🎉"
 readme = "README.md"
