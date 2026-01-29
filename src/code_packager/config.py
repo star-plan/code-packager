@@ -94,6 +94,19 @@ class ConfigManager:
         except Exception as e:
             logger.error(f"读取配置文件失败 {file_path}: {e}")
             return PathSpec.from_lines('gitwildmatch', [])
+
+    def load_custom_config(self, config_path: str) -> PathSpec:
+        """加载自定义配置文件（兼容旧调用方）
+
+        目前自定义配置的语义与 load_pathspec_from_file 完全一致：读取文件并按 gitwildmatch 解析。
+
+        Args:
+            config_path (str): 自定义配置文件路径
+
+        Returns:
+            PathSpec: 路径匹配规则对象
+        """
+        return self.load_pathspec_from_file(config_path)
     
     def load_pathspec_from_preset(self, preset_name: str) -> PathSpec:
         """从预设方案加载路径匹配规则

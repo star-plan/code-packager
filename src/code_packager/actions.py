@@ -59,5 +59,5 @@ def run_packaging_task(source_dir, output_zip, preset=None, config_path=None, re
         return True
         
     except Exception as e:
-         logger.error(f"打包过程中发生错误: {e}")
-         return False
+        logger.error(f"打包过程中发生错误: {e}")
+        return False

@@ -241,7 +241,7 @@ class CommentProcessor:
             return '\n'.join(cleaned_lines)
             
         except Exception as e:
-            self.logger.warning(f"注释移除处理失败: {e}，使用简单方法")
+            logger.warning(f"注释移除处理失败: {e}，使用简单方法")
             return self._simple_remove_python_comments(source)
     
     def _simple_remove_python_comments(self, content: str) -> str:

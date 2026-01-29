@@ -56,7 +56,12 @@ class FileFilter:
             bool: 是否应该排除
         """
         try:
-            relative_path = os.path.relpath(file_path, start=source_dir)
+            relative_path = os.path.relpath(file_path, start=source_dir).replace(os.sep, "/")
+
+            # PathSpec 以“路径字符串”进行匹配；对于目录规则（如 `node_modules/`），
+            # 如果传入的相对路径没有尾部斜杠，规则可能不会命中。
+            if os.path.isdir(file_path):
+                relative_path = relative_path.rstrip("/") + "/"
             
             # 全局规则检查
             if self.global_pathspec.match_file(relative_path):
@@ -119,7 +124,7 @@ class FileFilter:
             str: 相对路径
         """
         try:
-            return os.path.relpath(file_path, start=source_dir)
+            return os.path.relpath(file_path, start=source_dir).replace(os.sep, "/")
         except Exception as e:
             logger.warning(f"获取相对路径失败 {file_path}: {e}")
             return file_path

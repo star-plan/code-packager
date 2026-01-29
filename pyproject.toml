@@ -17,6 +17,15 @@ dependencies = [
 [project.scripts]
 pack-my-code = "code_packager.main:main"
 
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
