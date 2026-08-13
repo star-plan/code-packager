@@ -1,5 +1,7 @@
 # 📦 CodePackager — The Ultimate Code Packaging Tool 🚀
 
+[English](README.md) | [简体中文](README_CN.md)
+
 **Easily zip your codebase while excluding unnecessary files like a pro!** Say goodbye to bloated archives and hello to clean, lightweight packages. 🎉
 
 ## ✨ Features
